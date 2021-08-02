@@ -2,7 +2,7 @@ import React from 'react';
 import TimeChoices from './TimeChoices';
 
 import TimeType from '../types/Time';
-import { formatTime } from '../utils';
+import { formatTime } from './utils';
 import { Picker, TimeInput } from './TimePicker.styles';
 
 type Props = {

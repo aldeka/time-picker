@@ -1,4 +1,4 @@
-import TimeType from "./types/Time";
+import TimeType from "../types/Time";
 
 export function formatTime(time: TimeType) {
   let minuteString = time.minute.toString();

@@ -2,7 +2,7 @@ import React from 'react';
 import TimePicker from './TimePicker/TimePicker';
 import TimeLabel from './TimePicker/TimeLabel';
 
-import { getTimeNextHour } from './utils';
+import { getTimeNextHour } from './TimePicker/utils';
 
 import TimeType from './types/Time';
 import { AppWrapper } from './App.styles';

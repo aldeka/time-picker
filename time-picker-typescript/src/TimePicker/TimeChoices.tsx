@@ -1,7 +1,7 @@
 import React from 'react';
 
 import TimeType from '../types/Time';
-import { formatTime } from '../utils';
+import { formatTime } from './utils';
 import { TimeList } from './TimePicker.styles';
 
 type Props = {

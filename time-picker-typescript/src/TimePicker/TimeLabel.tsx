@@ -1,10 +1,17 @@
 import React from 'react';
+import TimeType from '../types/Time';
+import { formatTime } from '../utils';
+import { DisplayTime } from './TimePicker.styles';
 
-function TimeLabel() {
+type Props = {
+  time: TimeType;
+}
+
+function TimeLabel({ time }: Props) {
   return (
-    <div>
-      <i>Time Label [Extension!]</i>
-    </div>
+    <DisplayTime>
+      {formatTime(time)}
+    </DisplayTime>
   );
 }
 

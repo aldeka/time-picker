@@ -9,13 +9,25 @@ export const Picker = styled.form`
 export const TimeInput = styled.input`
   width: 100%;
   height: ${inputHeight}px;
+  font-size: ${inputHeight - 8}px;
+  margin-top: ${inputHeight / 2}px;
+
+  &.dark {
+    background: #111;
+    color: white;
+
+    &:focus {
+      outline: 2px solid #334466;
+      outline-offset: 2px;
+    }
+  }
 `;
 
 export const TimeList = styled.div`
   margin: 0;
   padding: 0;
   position: absolute;
-  top: ${inputHeight}px;
+  top: ${inputHeight * 1.5 + 8}px;
   left: 0;
 
   background: white;
@@ -27,9 +39,13 @@ export const TimeList = styled.div`
   label {
     display: block;
     padding: 8px;
-    
+
     &:hover {
       background-color: #f3f3f3;
+    }
+
+    &.active {
+      background-color: #dcedff;
     }
   }
 
@@ -38,6 +54,21 @@ export const TimeList = styled.div`
     position: fixed;
     width: 0;
   }
+
+  &.dark {
+    background: #111;
+    border: 1px solid #333;
+
+    label {
+      &:hover {
+        background-color: #222;
+      }
+  
+      &.active {
+        background-color: #334466;
+      }
+    }
+  }
 `;
 
 export const DisplayTime = styled.div`
@@ -45,4 +76,9 @@ export const DisplayTime = styled.div`
   font-size: 60px;
   font-weight: 700;
   text-align: center;
+  color: #bb0022;
+
+  &.dark {
+    color: white;
+  }
 `;

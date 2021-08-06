@@ -4,6 +4,8 @@ import TimeChoices from './TimeChoices';
 import TimeType from '../types/Time';
 import { formatTime } from './utils';
 import { Picker, TimeInput } from './TimePicker.styles';
+import useTimeStyle from '../hooks/useTimeStyle';
+import ThemeContext from '../context/ThemeContext';
 
 type Props = {
   time: TimeType;
@@ -12,14 +14,16 @@ type Props = {
 
 function TimePicker({ time, onSelect }: Props) {
   const [showDropdown, setShowDropdown] = React.useState<boolean>(false);
-  const [inputTime, setInputTime] = React.useState<string>(formatTime(time))
+  const [is24HourTime] = useTimeStyle();
+  const [inputTime, setInputTime] = React.useState<string>(formatTime(time, is24HourTime));
+  const theme = React.useContext(ThemeContext);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
   const dropdownRef = React.createRef<HTMLDivElement>();
 
   const handleSelect = (newTime: TimeType) => {
     setShowDropdown(false);
-    setInputTime(formatTime(newTime));
+    setInputTime(formatTime(newTime, is24HourTime));
     onSelect(newTime);
   };
 
@@ -62,6 +66,7 @@ function TimePicker({ time, onSelect }: Props) {
         value={inputTime}
         onChange={onChange}
         onFocus={() => setShowDropdown(true)}
+        className={theme}
       />
       {
         showDropdown && (

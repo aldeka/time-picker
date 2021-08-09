@@ -12,6 +12,8 @@ export function formatTime(time: TimeType, is24HourTime: boolean) {
     } else {
       hourString = (time.hour % 12).toString();
     }
+  } else if (hourString.length < 2) {
+    hourString = `0${hourString}`;
   }
   return `${hourString}:${minuteString}${is24HourTime ? '' : 'pm'}`;
 };

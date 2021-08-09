@@ -26,12 +26,24 @@ function useLocalStorage(key: string, initialValue: any) {
       // Save state
       setStoredValue(valueToStore);
       // Save to local storage
-      console.log('hello', storedValue, valueToStore)
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      const event = new Event('storage');
+      window.dispatchEvent(event);
     } catch (error) {
       console.log(error);
     }
-  }, [key, storedValue])
+  }, [key, storedValue]);
+
+   React.useEffect(() => {
+    window.addEventListener('storage', () => {
+      try {
+        const item = window.localStorage.getItem(key);
+        setStoredValue(item ? JSON.parse(item) : initialValue);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  }, [key, initialValue]);
 
   return [storedValue, setValue];
 }

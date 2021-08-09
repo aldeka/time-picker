@@ -2,7 +2,7 @@ import React from 'react';
 import TimeChoices from './TimeChoices';
 
 import TimeType from '../types/Time';
-import { formatTime } from './utils';
+import { formatTime, getValidTime } from './utils';
 import { Picker, TimeInput } from './TimePicker.styles';
 import useTimeStyle from '../hooks/useTimeStyle';
 import ThemeContext from '../context/ThemeContext';
@@ -21,21 +21,22 @@ function TimePicker({ time, onSelect }: Props) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const dropdownRef = React.createRef<HTMLDivElement>();
 
-  const handleSelect = (newTime: TimeType) => {
+  const handleSelect = React.useCallback((newTime: TimeType) => {
     setShowDropdown(false);
     setInputTime(formatTime(newTime, is24HourTime));
     onSelect(newTime);
-  };
+  }, [onSelect, is24HourTime]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputTime(e.target.value);
-  };
-
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = React.useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    // TODO validate input
-    // handleSelect(inputTime);
-  };
+    const validTime = getValidTime(inputRef?.current?.value || '', is24HourTime, time);
+    handleSelect(validTime);
+  }, [inputRef, is24HourTime, time, handleSelect]);
+
+  React.useEffect(() => {
+    // update input contents if the format changes
+    setInputTime(formatTime(time, is24HourTime));
+  }, [time, is24HourTime]);
 
   React.useEffect(() => {
     /**
@@ -48,7 +49,8 @@ function TimePicker({ time, onSelect }: Props) {
         && !inputRef.current.contains(e?.target as Node)
       ) {
         setShowDropdown(false);
-        // TODO validate input
+        const validTime = getValidTime(inputRef?.current?.value || '', is24HourTime, time);
+        handleSelect(validTime);
       }
     }
     // Bind the event listener
@@ -57,7 +59,11 @@ function TimePicker({ time, onSelect }: Props) {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, [handleSelect, is24HourTime, dropdownRef, time]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTime(e.target.value);
+  };
 
   return (
     <Picker onSubmit={onSubmit}>

@@ -23,3 +23,34 @@ export function getTimeNextHour(): TimeType {
     minute: 0,
   };
 };
+
+export function getValidTime(timeString: string, is24HourTime: boolean, prevValue: TimeType): TimeType {
+  const test = is24HourTime ? /^\d?\d:?\d\d$/ : /^(?:\d?\d:?\d\d(?:(?:am)?|(?:pm)?))$/g;
+  const maxHours = is24HourTime ? 23 : 12;
+
+  if (timeString.match(test)) {
+    const lastTwoChars = timeString.slice(timeString.length - 2, timeString.length);
+    let minute = lastTwoChars;
+    let hour = timeString.split(':')[0].slice(0, 2);
+
+    if (lastTwoChars === 'pm' || lastTwoChars === 'am') {
+      // if the last two chars are taken up with am/pm we need to search further backwards for the minutes.
+      minute = timeString.slice(timeString.length - 4, timeString.length - 2);
+      hour = timeString.slice(0, timeString.length - 4).replace(/\D/g,''); // replace removes the colon if present
+    }
+    const minuteNum = parseInt(minute, 10);
+    const hourNum = parseInt(hour, 10);
+    if (Number.isNaN(minuteNum) || minuteNum > 60 || minuteNum < 0) {
+      return prevValue;
+    }
+
+    if (Number.isNaN(hourNum) || hourNum > maxHours || hourNum < 0) {
+      return prevValue;
+    }
+    return {
+      hour: hourNum,
+      minute: minuteNum,
+    };
+  }
+  return prevValue;
+}
